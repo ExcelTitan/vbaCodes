@@ -1,3 +1,5 @@
+'// for developers
+
 '// 34 bit declarations
 	Private Declare Function FindWindow Lib "User32.dll" Alias "FindWindowA" (ByVal lpszClass As String, ByVal lpszWindow As String) As Long
 	Private Declare Function MoveWindow Lib "User32.dll" (ByVal HWnd As Long, ByVal X As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal bRepaint As Long) As Long
