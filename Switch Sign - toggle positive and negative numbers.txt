@@ -1,0 +1,38 @@
+'==================================================================================================
+' ## Switch positive to negative numbers
+'==================================================================================================
+Sub SwitchSign()
+    '// Vars
+    Dim rngSelection As Range
+    Dim rngCell As Range
+
+    '// Turn off error checking briefly in case no special cells selected
+    On Error Resume Next
+
+    '// Set Selection Range
+    Set rngSelection = Application.Selection
+    Set rngSelection = Intersect(Selection, _
+        Selection.Cells.SpecialCells(xlCellTypeConstants, xlNumbers))
+    If rngSelection Is Nothing Then Exit Sub
+
+    '// Error checking on
+    On Error GoTo 0
+
+    '// Test if the range is empty
+    If Application.CountA(rngSelection) = 0 Then Exit Sub
+
+    '// Optimise
+    Application.ScreenUpdating = False
+
+    '// Test each cell in the range is not a formula and is a number
+    For Each rngCell In rngSelection
+        'If rngCell.Value = "" Then GoTo NextOne
+        'If rngCell.HasFormula Then GoTo NextOne
+        'If IsNumeric(rngCell) Then rngCell.Value = rngCell * -1
+        rngCell.Value = rngCell * -1
+NextOne:
+    Next rngCell
+
+    '// Optimise
+    Application.ScreenUpdating = False
+End Sub

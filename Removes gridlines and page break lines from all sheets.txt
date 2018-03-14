@@ -1,0 +1,28 @@
+'==================================================================================================
+' ## Removes gridlines and page break lines from all sheets in the active workbook
+'==================================================================================================
+Sub RemoveLines()
+    '// Vars
+    Dim ws As Worksheet
+    Dim shActive As String
+    
+    '// Optimise
+    Application.ScreenUpdating = False
+
+    '// Get the current sheet name
+    shActive = ActiveSheet.Name
+
+    '// Loop through each sheet and turn off page breaks and gridlines
+    For Each ws In ActiveWorkbook.Worksheets
+        ws.DisplayPageBreaks = False
+        ws.Activate
+        ActiveWindow.DisplayGridlines = False
+    Next ws
+    
+    '// Optimise
+    Application.ScreenUpdating = True
+    
+    '// Activate original sheet
+    Sheets(shActive).Select
+End Sub
+

@@ -1,0 +1,3 @@
+Code snippet to test if a cell is not selected
+
+If TypeName(Selection) <> "Range" Then Exit Sub

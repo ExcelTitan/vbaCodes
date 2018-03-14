@@ -1,0 +1,28 @@
+'==================================================================================================
+' ## Use ShellExecute to open a URL
+'==================================================================================================
+#If VBA7 Then
+    Private Declare PtrSafe Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ( _
+                        ByVal hwnd As Long, _
+                        ByVal Operation As String, _
+                        ByVal fileName As String, _
+                        Optional ByVal Parameters As String, _
+                        Optional ByVal Directory As String, _
+                        Optional ByVal WindowStyle As Long = vbMinimizedFocus) As Long
+
+#Else
+    Private Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ( _
+                        ByVal hwnd As Long, _
+                        ByVal Operation As String, _
+                        ByVal fileName As String, _
+                        Optional ByVal Parameters As String, _
+                        Optional ByVal Directory As String, _
+                        Optional ByVal WindowStyle As Long = vbMinimizedFocus) As Long
+#End If
+
+Public Sub OpenUrl()
+
+    Dim lSuccess As Long
+    lSuccess = ShellExecute(0, "Open", "www.google.com")
+
+End Sub

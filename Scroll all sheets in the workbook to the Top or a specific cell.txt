@@ -1,0 +1,84 @@
+' Scroll all sheets in the workbook to the top, either A1 or specific cell as the top row
+'==========================================================================================================
+' ## Scroll all sheets to A1
+'==========================================================================================================
+Sub ScrollUp()
+	'// Vars
+	Dim sht As Worksheet
+	Dim shtInitialSheet As Worksheet
+
+	'// Optimise
+	Application.ScreenUpdating = False
+
+	'// Set Activesheet to come back to
+	Set shtInitialSheet = ActiveSheet
+
+	'// Loop through sheets, scroll to the top
+	For Each sht In ActiveWorkbook.Worksheets
+		If sht.Visible Then
+			sht.Activate
+			Range("A1").Select
+			ActiveWindow.ScrollRow = 1
+			ActiveWindow.ScrollColumn = 1
+		End If
+	Next sht
+
+	'// Activate initial sheet
+	shtInitialSheet.Activate
+
+	'// Optimise
+	Application.ScreenUpdating = True
+End Sub
+
+'==========================================================================================================
+' ## Scroll all sheets to a cell with range input
+'==========================================================================================================
+Sub ScrollToCell()
+    '//Vars
+    Dim sht As Worksheet
+    Dim shtInitialSheet As Worksheet
+    Dim rngCell As Range
+    Dim rngSelection As Range
+    Dim lngColumn As Long
+    Dim lngRow As Long
+
+    '// Set Activesheet to come back to
+    Set shtInitialSheet = ActiveSheet
+
+    '// Pick a cell to put at the top of each sheet
+    '// Briefly turn off error checking
+    On Error Resume Next
+
+    '// Pick the cell using an inputbox
+    Set rngSelection = Application.InputBox("Select cell with will be at " & _
+                "the scroll to the top of each sheet", "Select Cell", , Type:=8)
+
+    '// Test if clicked cancel
+    If rngSelection Is Nothing Then Exit Sub
+
+    '// Get to the row and column numbers from selected cells
+    lngColumn = rngSelection.Column
+    lngRow = rngSelection.Row
+
+    '// Turn on error checking
+    On Error GoTo 0
+
+    '// Optimise
+    Application.ScreenUpdating = False
+
+    '// Loop through sheets, scroll to the top
+    For Each sht In ActiveWorkbook.Worksheets
+        If sht.Visible Then
+            sht.Activate
+            Cells(lngRow, lngColumn).Select
+            ActiveWindow.ScrollRow = lngRow
+            ActiveWindow.ScrollColumn = lngColumn
+        End If
+    Next sht
+
+    '// Activate initial sheet
+    shtInitialSheet.Activate
+
+    '// Optimise
+    Application.ScreenUpdating = True
+End Sub

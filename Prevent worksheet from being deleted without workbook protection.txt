@@ -1,0 +1,13 @@
+'==========================================================================================================
+' ## Prevent worksheet from being deleted without woorkbook protection
+'==========================================================================================================
+'// In a normal module, paste this code:
+Sub UnprotectBook()
+	ThisWorkbook.Unprotect
+End Sub
+
+'// Then for every worksheet, right-click, select View Code, and then paste this:
+Private Sub Worksheet_Deactivate()
+	ThisWorkbook.Protect , True
+	Application.OnTime Now, "UnprotectBook"
+End Sub

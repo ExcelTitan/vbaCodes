@@ -1,0 +1,22 @@
+'==========================================================================================================
+' ## Finds the first and last used cells in Column E,
+'    the number 5 represents the Column number "E" 
+'==========================================================================================================
+Sub UsedCellsInSpecificColumnm()
+    '// Vars
+    Dim lngFirstRow As Long
+    Dim lngLastRow As Long
+
+    '// Set the First Row, change this to a number e.g. 1 for Row 1 or
+    ' used the UsedRange method, the number in the brackets represents a column number
+    lngFirstRow = ActiveSheet.UsedRange.Columns(5).Row
+
+    '// Find the last used cell in column E
+    lngLastRow = ActiveSheet.Cells(Rows.Count, 5).End(xlUp).Row
+
+    '// Alert the first and last rows
+    MsgBox lngFirstRow & vbNewLine & lngLastRow
+
+    '// Select the range in Column E
+    Range("E" & lngFirstRow & ":E" & lngLastRow).Select
+End Sub

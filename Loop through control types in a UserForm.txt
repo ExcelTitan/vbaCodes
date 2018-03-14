@@ -1,0 +1,52 @@
+Loop through control types in a UserForm
+
+Control Type Names
+
+Label
+TextBox
+ComboBox
+ListBox
+CheckBox
+OptionButton
+ToggleButton
+Frame
+CommandButton
+TabStrip
+MultiPage
+ScrollBar
+SpinButton
+Image
+
+'==================================================================================================
+' ## Loop through all controls
+'==================================================================================================
+Sub LoopAllControls()
+    '// Vars
+    Dim ctrl As Control
+    '// Loop Through each control on UserForm
+    For Each ctrl In UserForm1.Controls
+        '// Do something with that control type…eg make visible
+        ctrl.Visible = True
+    Next ctrl
+End Sub
+
+'==================================================================================================
+' ## Loop through a specific control type
+'==================================================================================================
+Sub LoopSpecificControl()
+    '// Vars
+    Dim ctrl As Control
+    Dim ctrlType As String
+
+    '// Choose control type to loop through
+    ctrlType = Textbox”
+
+    '// Loop Through each control on UserForm
+    For Each ctrl In UserForm1.Controls
+        '// Test specific control type
+        If TypeName(ctrl) = ctrlType Then
+            '// Do Something With That Control Type…eg no value
+            ctrl.Value = ""
+        End If
+        Next ctrl
+End Sub

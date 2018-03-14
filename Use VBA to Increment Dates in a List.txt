@@ -1,0 +1,50 @@
+'==================================================================================================
+' ## Increment dates in a list dynamically with named ranges for:
+'    Start date, End date and Increment (integer) in days
+'    Create single cell Named Ranges for:
+'    StartDate  (date)      e.g. Range(C3)
+'    EndDate    (date)      e.g. Range(C4)
+'    Increment  (integer)   e.g. Range(C5)
+'    OutputDate (date)      e.g. Range(E4)
+'==================================================================================================
+Sub IncrementDates()
+    '// Vars
+    Dim RowIndex    As Long
+    Dim i           As Long
+    Dim OutRange    As Range
+    
+    '// Optimise
+    Application.ScreenUpdating = False
+    
+    '// Clear previous output
+    Set OutRange = Range([OutputDate].Address & ":" & [OutputDate].End(xlDown).Offset(0, 1).Address)
+    OutRange.Clear
+    
+    '// Output and Increment
+    If [EndDate] - [StartDate] <= 0 Then
+        Exit Sub
+        End If
+        RowIndex = 0
+        For i = [StartDate] To [EndDate]
+            [OutputDate].Cells(1, 1).Offset(RowIndex, 0) = i
+            [OutputDate].Cells(1, 1).Offset(RowIndex, 0).NumberFormat = "m/d/yyyy"
+            [OutputDate].Cells(1, 1).Offset(RowIndex, 1) = Format(i, "dddd") 'Optional date formatting
+            RowIndex = RowIndex + 1
+            i = i + [Increment] - 1
+        Next
+    
+    '// Optional Formatting, inside borders gray
+    '   set the used output range
+    Set OutRange = Range([OutputDate].Offset(-1, 0).Address & ":" & [OutputDate].End(xlDown).Offset(0, 1).Address)
+
+    With OutRange.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+        .Color = RGB(128, 128, 128)
+    End With
+        With OutRange.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+        .Color = RGB(128, 128, 128)
+    End With
+End Sub

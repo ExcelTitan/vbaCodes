@@ -1,0 +1,13 @@
+'// If you have a list of repeated Items including the Header, 
+'   you can use the following Code to remove the Row duplicates:
+
+'// useing an OffSet to exclude Headers
+Range("A1").CurrentRegion.Offset(1, 0).RemoveDuplicates (Array(1))
+ 
+'// using Short Notation and include/exclude Headers
+[A:A].RemoveDuplicates Columns:=1, Header:=xlNo
+[A:A].RemoveDuplicates Columns:=1, Header:=xlYes
+ 
+'// and further shortened (Headers excluded by default)
+Columns(1).RemoveDuplicates Columns:=1
+[A:A].RemoveDuplicates Columns:=1

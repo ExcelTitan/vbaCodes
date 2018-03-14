@@ -1,0 +1,16 @@
+'==================================================================================================
+' ## Prevent VBA Code from running while in read-only mode
+'    notifies the user and presents a msgbox with yes or no option
+'==================================================================================================
+Sub ReadOnlyCheck()
+    '// vars
+    Dim Answer As Long
+
+    '// Check to see if file is Read-Only
+    If ThisWorkbook.ReadOnly = True Then
+        Answer = MsgBox("Someone is currently editing this file and your changes will NOT be saved. " _
+            & vbNewLine & "Do you wish to proceed?", vbYesNo, "Read-Only File")
+
+        If Answer = vbNo Then Exit Sub
+    End If
+End Sub

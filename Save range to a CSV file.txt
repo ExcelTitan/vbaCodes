@@ -1,0 +1,42 @@
+'==================================================================================================
+' ## Saves the selected range to CSV, only copies the visible cells in the selected range
+'==================================================================================================
+Sub RangeToCSV()
+    '// Vars
+    Dim wb As Workbook
+    Dim varFileName As Variant
+    Dim rngSelection As Range
+
+    '// Test a range selected
+    If TypeName(Selection) <> "Range" Then Exit Sub
+
+    '// Set selection
+    Set rngSelection = Application.Selection.SpecialCells(xlCellTypeVisible)
+
+    '// Optimise
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+
+    '// Get the Save File Name
+    varFileName = Application.GetSaveAsFilename("", filefilter:="CSV Files (*.csv), *.csv")
+
+    '// Test user cancels
+    If varFileName = False Then Exit Sub
+
+    '// Add a new workbook and copy selection to it
+    Set wb = Application.Workbooks.Add
+    rngSelection.SpecialCells(xlCellTypeVisible).Copy
+    wb.Worksheets(1).Paste
+
+    '// Save and close the new CSV file
+    wb.SaveAs filename:=varFileName, FileFormat:=xlCSV, CreateBackup:=False
+    wb.Close
+
+    '// Optimise
+    Application.CutCopyMode = False
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
+
+    '// Open file
+    Workbooks.Open varFileName
+End Sub

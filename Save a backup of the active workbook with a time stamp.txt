@@ -1,0 +1,54 @@
+'==================================================================================================
+' ## Save a backup of the active workbook
+'    Prompts the user for a save location, adds a time stamp to the file name
+'==================================================================================================
+Sub SaveBackup()
+    Dim vntSaveName     As Variant
+    Dim strFileName     As String
+    Dim strFileFormat   As String
+    Dim strTitle        As String
+    Dim strPath         As String
+    
+    '// Check the workbook has been saved; if not then notify the user and exit sub
+    If ActiveWorkbook.Path = "" Then
+        MsgBox "You must save the workbook first" & vbLf & _
+                "to be able to save back up versions"
+        Exit Sub
+    End If
+    
+    '// Set the file path as the workbook path
+    strPath = ActiveWorkbook.Path
+    If Right(strPath, 1) <> "\" Then
+        strPath = strPath & "\"
+    End If
+
+    ''// Notify user via message box that they are to choose where to save a file
+    '    MsgBox "This will save a backup copy of your workbook" & vbNewLine & _
+    '            "Choose where to save the backup - a time stamp has already been added" & vbNewLine & _
+    '            "The file format will remain the same" & vbNewLine & vbNewLine & _
+    '            "Click OK to continue", Title:="Save Backup of - " & ActiveWorkbook.Name
+                      
+    '// Add time stamp to the workbook name
+    strFileName = Left(ActiveWorkbook.Name, (InStrRev(ActiveWorkbook.Name, ".") - 1))
+    strFileName = strFileName & "_" & Format(Date, "yyyymmdd") & "_" & _
+                    Format(Now, "hhmmss")
+                    
+    '// Title for dialog box
+    strTitle = "Save back up of the workbook -  note the file format remains the same"
+    
+    '// Prompt to get the save name and location
+    vntSaveName = Application.GetSaveAsFilename(InitialFileName:=strPath & strFileName, Title:=strTitle)
+
+    '// Test user clicked cancel
+    If vntSaveName = False Then Exit Sub
+
+    '// Get the file format
+    strFileFormat = Split(ActiveWorkbook.FullName, ".") _
+            (UBound(Split(ActiveWorkbook.FullName, ".")))
+
+    '// Get the full file name
+    strFileName = vntSaveName & strFileFormat
+
+    '// Save back up
+    ActiveWorkbook.SaveCopyAs strFileName
+End Sub

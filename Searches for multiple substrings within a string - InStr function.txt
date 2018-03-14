@@ -1,0 +1,52 @@
+'==================================================================================================
+' ## Searches for multiple substrings within a string using the InStr function.
+'    User to set an array 'arrItems' of substrings to search within the main string 'strSearch'
+'    The search is not case sensitive
+'    The user will be alerted to which substrings were found in the main string
+'==================================================================================================
+Function SearchSubstrings(arrItems As Variant, strSearch As String) As Boolean
+    '// Vars
+    Dim lngItem As Long
+    Dim strResult As String
+    Dim blnItemFound As Boolean
+     
+    '// Set Item Found to false, the If statement will determine true or false
+        blnItemFound = False
+     
+    '// Loop through each substring in the array, if substring is found then
+    '   set the blnItemFound to True and exit the Loop
+        For lngItem = 0 To UBound(arrItems)
+            If InStr(1, strSearch, arrItems(lngItem), vbTextCompare) > 0 Then
+                '// set to True as found a substring
+                blnItemFound = True
+                '// return the found substrings to User
+                strResult = strResult & ", " & arrItems(lngItem)
+            End If
+        Next lngItem
+        
+    '// If we have a result set to true
+    '   [optional] alert the user of the found substrings
+ResultFound:
+        If blnItemFound = True Then
+        
+            SearchSubstrings = True
+            
+'            '// Take out the first comma
+'            strResult = Mid(strResult, 2)
+'
+'            '// Alert the user
+'            MsgBox "Found the substring(s) within the main substring: " & _
+'            vbNewLine & vbNewLine & strResult
+        End If
+
+End Function
+
+'==================================================================================================
+' ## Search the array of substrings "horse", "dog", "rabbit" within the sentence
+'    "Cats are better than horses but not dogs"
+'==================================================================================================
+Sub mySearchSubstrings()
+    MsgBox SearchSubstrings _
+                (Array("horse", "dog", "rabbit"), _
+                "Cats are better than horses but not dogs")
+End Sub

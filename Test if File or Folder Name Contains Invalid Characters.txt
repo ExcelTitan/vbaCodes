@@ -1,0 +1,36 @@
+'==========================================================================================================
+' ## Function tests if a string contains invalid characters for Windows file or folder names
+'    Invalid file or folder name characters in OneDrive for Business on Office 365, SharePoint
+'    Online, and SharePoint Server 2016: " # % * : < > ? / \ |
+'    Source: https://support.office.com/en-us/article/Invalid-characters-in-file-or-folder-names-or-invalid-file-types-in-OneDrive-for-Business-64883A5D-228E-48F5-B3D2-EB39E07630FA
+'==========================================================================================================
+Function isInvalidFile(strSearch As String)
+    '// Vars
+    Dim lngItem As Long
+    Dim arrItems As Variant
+    Dim blnItemFound As Boolean
+
+    '// Set Item Found to false, the If statement will determine true or false
+    blnItemFound = False
+
+    '// Array of invalid characters
+    arrItems = Array(Chr(34), "#", "%", "*", ":", "<", ">", "?", "/", "\", "|")
+
+    '// Loop through each substring in the array, if substring is found then
+    ' set the blnItemFound to True and exit the Loop
+    For lngItem = 0 To UBound(arrItems)
+        If InStr(1, strSearch, arrItems(lngItem), vbTextCompare) > 0 Then
+            '// set to True as found a substring
+            blnItemFound = True
+        End If
+    Next lngItem
+
+    '// If we have a result, alert the user of the found substrings
+    If blnItemFound = True Then isInvalidFile = True
+End Function
+
+Sub TestValidFileName()
+    If isInvalidFile("TestFile.xlsx") Then
+        MsgBox "Invalid file name"
+    End If
+End Sub

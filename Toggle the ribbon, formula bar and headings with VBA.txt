@@ -1,0 +1,30 @@
+'==================================================================================================
+' ## Toggles the Ribbon and hides the formula bar and headings
+'	 This toggles Ribbon in Excel to hide or display. The ribbon in it's minimized state is in
+'	 most cases less than 80. Testing this height tells us if we can hide the formula bar and 
+'	 headings. You can test the height of the ribbon with this snippet:
+'	 MsgBox CommandBars("Ribbon").Height
+'	 Also hiding the formula bar and headings is optional. Note that the ribbon will be 
+'	 minimized and formula bar hidden for all sheets in all workbooks. The headings will only
+'	 be hidden for the active sheet.
+'==================================================================================================
+Sub ToggleRibbon()
+	'// Toggle the ribbon
+	Application.CommandBars.ExecuteMso "MinimizeRibbon"
+	
+	'// Optimise and hide the formula bar and headers with the ribbon
+	Application.ScreenUpdating = False
+
+	'// If the ribbon height is > 80 then hide the formula bar 
+	'	and headings else show them
+	If Application.CommandBars.Item("Ribbon").Height > 80 Then
+		Application.DisplayFormulaBar = False
+		ActiveWindow.DisplayHeadings = False
+	Else
+		Application.DisplayFormulaBar = True
+		ActiveWindow.DisplayHeadings = True
+	End If
+
+	'// Optimise
+	Application.ScreenUpdating = True
+End Sub

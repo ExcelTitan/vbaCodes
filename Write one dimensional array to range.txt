@@ -1,0 +1,37 @@
+'==================================================================================================
+' ## Write an array to a one dimensional column
+'==================================================================================================
+Sub ArrayToColumns()
+    '// vars
+    Dim myArray     As Variant
+    Dim Destination As Range
+    
+    '// set the array of values
+    myArray = Array("Column1", "Column2", "Column3", "Column4", "Column5")
+    
+    '// set the destinations first cell
+    Set Destination = Range("B4")
+    
+    Set Destination = Destination.Resize(1, UBound(myArray) + 1)
+    Destination.Value = myArray
+
+End Sub
+
+'==================================================================================================
+' ## Write an array to a one dimensional row
+'==================================================================================================
+Sub ArrayToRows()
+'// vars
+    Dim myArray     As Variant
+    Dim Destination As Range
+    
+    '// set the array of values
+    myArray = Array("Row1", "Row2", "Row3", "Row4", "Row5")
+    
+    '// set the destinations first cell
+    Set Destination = Range("B4")
+
+    Set Destination = Destination.Resize(UBound(myArray) + 1, 1)
+    Destination.Value = Application.Transpose(myArray)
+
+End Sub

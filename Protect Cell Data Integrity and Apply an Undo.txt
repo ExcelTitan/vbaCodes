@@ -1,0 +1,23 @@
+'==================================================================================================
+' ## Protect Cell Data Integrity
+'==================================================================================================
+'    Paste this to a Sheet Code. It will apply UNDO to a change to a cell in range A1
+'    Cell A1 Is protected
+'    No Cell change
+'    No Delete
+'    No Backspace
+'    No Delete Rows or Columns - try it!
+'    No Cell over-write
+
+Option Explicit
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+     ' will apply UNDO to a change to a cell in range a1
+    If Not Intersect(Target, Range("a1")) Is Nothing Then
+        With Application
+            .EnableEvents = False
+            .Undo
+            .EnableEvents = True
+        End With
+    End If
+End Sub

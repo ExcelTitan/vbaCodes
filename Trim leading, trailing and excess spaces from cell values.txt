@@ -1,0 +1,20 @@
+'==========================================================================================================
+' ## Trim leading and trailing spaces from cell values
+'==========================================================================================================
+Sub TrimCells()
+	'// Vars
+	Dim rngSelection As Range
+	Dim rngArea As Range
+
+	'// Take out formulas from the selected range
+	If Application.Selection.Cells.Count = 1 Then
+		Set rngSelection = Application.Selection
+	Else
+		Set rngSelection = Application.Selection.SpecialCells(xlCellTypeConstants)
+	End If
+
+	'// Trim and Clean cell values
+	For Each rngArea In rngSelection.Areas
+		rngArea.Value = Evaluate("IF(ROW(" & rngArea.Address & "),CLEAN(TRIM(" & rngArea.Address & ")))")
+	Next rngArea
+End Sub

@@ -1,0 +1,39 @@
+'==================================================================================================
+' ## Loop through all tables in the workbook
+'==================================================================================================
+Sub LoopThroughAllTablesinWorkbook()
+    '// vars
+    Dim tbl As ListObject
+    Dim sht As Worksheet
+
+    '// Loop through each sheet and table in the workbook
+    For Each sht In ThisWorkbook.Worksheets
+        '// Loop through each table on this looped sheet
+        For Each tbl In sht.ListObjects
+
+            '// Do something to all the tables…
+            tbl.ShowTotals = True
+        
+        '// Next table
+        Next tbl
+    
+    '// Loop to the next sheet
+    Next sht
+End Sub
+
+'==================================================================================================
+' ## Loop through all tables on the active sheet
+'==================================================================================================
+Sub LoopThroughAllTablesActiveSheet()
+    '// vars
+    Dim tbl As ListObject
+
+    '// Loop through each sheet and table in the workbook
+    For Each tbl In ActiveSheet.ListObjects
+
+        '// Do something to all the tables…
+        tbl.ShowTotals = True
+    
+    '// Next table
+    Next tbl
+End Sub

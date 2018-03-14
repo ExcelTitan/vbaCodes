@@ -1,0 +1,74 @@
+'For single worksheet templates that you need to use over an over again, why not install them as an xltm file in your templates folder?
+'This Macro is used well with an ActiveX button on the sheet assigned to it, quickly checks that the file doesn't already exists, deletes the existing template file and then saves the new version to the Templates folder.
+'===================================================================================================   
+
+     Private Const InstallFileName As String = "_MyTemplate"                'File Name with underscore for alphabetical sorting
+     Private Const InstallApplicationName As String = "Military_Alphabet"   'Name of the template
+     Private Const InstallFileExtension As String = ".xltm"
+     Private Const InstallFileFormat As Integer = 53
+    
+'===================================================================================================
+' ## Installer/uninstaller macro to save a worksheet as a xltm macro enabled sheet template
+'===================================================================================================
+Private Sub InstallMilitary_Click()
+    '// vars
+    Dim wbWorkbook As Workbook
+    Dim vbResult As VbMsgBoxResult
+    
+
+    '// Test that the sheet is not already saved in the Tempaltes folder
+    '   if it is not already saved then prompt user to install the sheet as a sheet template
+    If (Dir(CStr(Application.TemplatesPath & InstallFileName & InstallFileExtension)) > "") = False Then
+        vbResult = MsgBox("Install '" & InstallApplicationName & "' as a template?" & vbLf & vbLf & _
+                          "Click Yes to Install, No to exit", _
+                          vbYesNo Or vbInformation, _
+                          InstallApplicationName)
+    '// If User clicks 'Yes' to install, save current sheet in the templates folder
+    '   If User clicked 'No' then do nothing and close the msgbox
+        If vbResult = vbYes Then
+            '// Optimise
+            With Application
+                .ScreenUpdating = False
+                .DisplayAlerts = False
+            End With
+            
+            '// Copy the active sheet to a new workbook
+            ThisWorkbook.Sheets(InstallApplicationName).Copy
+            Set wbWorkbook = ActiveWorkbook
+            
+            '// Save the new workbook as xltm sheet template with macros enabled
+            With wbWorkbook
+                wbWorkbook.SaveAs Application.TemplatesPath & InstallFileName & InstallFileExtension, FileFormat:=InstallFileFormat
+                .Close False
+            End With
+            
+            '// Promt user that sheet saved as template in the template folder
+            MsgBox "'" & InstallApplicationName & "' has been Installed as a Template in:" & vbLf & _
+            Application.TemplatesPath & vbLf & vbLf & _
+            "The file name in the Templates folder is: '" & InstallFileName & "'", vbInformation, InstallApplicationName
+
+            '// Optimise
+            With Application
+                .ScreenUpdating = True
+                .DisplayAlerts = True
+            End With
+        End If
+        
+    '// If template is already installed then prompt user to Delete the template file
+    Else
+        'Prompt User to uninstall
+        vbResult = MsgBox("Uninstall the '" & InstallApplicationName & "' template?" & vbLf & vbLf & _
+                          "Click Yes to Uninstall, No to exit", _
+                          vbYesNo Or vbInformation, _
+                          InstallApplicationName)
+                          
+        '// If User clicked 'Yes' to uninstall, delete the sheet template in the templates folder
+        '   If User clicked 'No' then do nothing and close the msgbox
+        If vbResult = vbYes Then
+            Kill CStr(Application.TemplatesPath & InstallFileName & InstallFileExtension)
+            MsgBox "The '" & InstallApplicationName & "' Template has been Uninstalled", vbInformation, InstallApplicationName
+        End If
+        
+End If
+End Sub
+

@@ -1,0 +1,17 @@
+'==================================================================================================
+'## Tests if the activesheet is protected
+'    '// If the activesheet is protected
+'    If ActiveProtected = True Then Exit Sub
+'==================================================================================================
+Function ActiveProtected() As Boolean
+    '// If the activesheet is protected then exit sub
+    If ActiveSheet.ProtectContents = True Then
+        MsgBox "The active sheet is protected" & vbDoubleLine & _
+               "Cannot continue with this procedure"
+        ActiveProtected = True
+        Exit Function
+    End If
+    
+    '// Not protected
+    ActiveProtected = False
+End Function

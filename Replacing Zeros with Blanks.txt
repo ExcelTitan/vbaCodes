@@ -1,0 +1,17 @@
+'// If you have zeros included in a data extract, you can set these 
+'   to Blank using the following (you can use Columns or a Range):
+
+'// Columns, default replace 0 with blanks
+Columns("A:D").Replace What:="0", Replacement:=""
+ 
+'// extended, look at whole Cells, Match Case etc.
+Columns("A:D").Replace What:="0", Replacement:="", LookAt:=xlWhole, SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, ReplaceFormat:=False
+ 
+'// Rows, extended, look at whole Cells
+Rows("1:5").Replace What:="0", Replacement:="", LookAt:=xlWhole
+ 
+'// Range, simple, replace all zeros (0) with Blanks
+Range("A1:B4").Replace What:="0", Replacement:=""
+ 
+'// Defined Name or Named Range
+[MyRange].Replace What:="0", Replacement:="", LookAt:=xlWhole

@@ -1,0 +1,37 @@
+This vba code ensures that the active sheet cannot be renamed as well as makes sure a copy of a sheet with the same name can be imported into the active workbook. 
+Try it out! If you try to rename the sheet then it will just revert to the name you allocated in the sheet code. All you have to do with the below is change the variable shtName from "MySheetName" to whatever you want.
+You need to paste this code into the sheet code module for every sheet in your workbook you want to retain the sheet name for.
+
+' ==================================================================================================
+' ## Prevent renaming worksheet
+'    Put this code in the Sheet Code module for each sheet
+'    Change the sheet name to each sheet's respective sheet name,
+'    this example uses a sheet named "MySheetName"
+' ==================================================================================================
+Private Sub Worksheet_SelectionChange(ByVal Tar­get As Range)
+    Dim shtName As String
+    
+    '// This is the activesheet name, change this for each
+    '   sheet in the sheet code module
+    shtName = "MySheetName"
+    
+    On Error Resume Next
+    
+    '// Test another sheet added named "MySheetName"
+    If ActiveSheet.Name = shtName & " (2)" Then
+
+        '// Turn off prompt to Delete Sheet
+        Application.DisplayAlerts = False
+        ActiveSheet.Delete
+        Application.DisplayAlerts = True
+        
+        '// Alert user that sheet was duplicate
+        MsgBox shtName & " Sheet is already in this workbook" & vbNewLine & _
+                "The inserted sheet has now been deleted", vbCritical
+
+    '// Test another sheet added named "MySheetName"
+    ElseIf ActiveSheet.Name <> shtName Then
+        ActiveSheet.Name = shtName
+    
+    End If
+End Sub

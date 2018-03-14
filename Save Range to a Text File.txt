@@ -1,0 +1,61 @@
+Sub RangeToTextFile()
+
+	'// Vars
+    Dim strText As String
+    Dim rngSelection As Range
+    Dim i As Long, J As Long
+    Dim varFileName As Variant
+
+    Dim wbDest As Workbook
+    Dim shtNew As Worksheet
+    
+    '// Test a range selected
+    If TypeName(Selection) <> "Range" Then Exit Sub
+
+    '// Get the Save File Name
+    varFileName = Application.GetSaveAsFilename("", filefilter:="Text Files (*.txt), *.txt")
+
+    '// Test user cancels
+    If varFileName = False Then Exit Sub
+
+    '// Set the selected range
+    Set rngSelection = Application.Selection
+
+    '// Optimise
+    Application.ScreenUpdating = False
+    
+
+    '// Copy the selected range and autofit columns
+    rngSelection.Copy
+    
+    '// Create new workbook and set the new sheet
+    Set wbDest = Application.Workbooks.Add
+    Set shtNew = Application.ActiveSheet
+    
+    '// Paste data and column widths
+    shtNew.Range("A1").PasteSpecial Paste:=xlPasteColumnWidths
+    rngSelection.SpecialCells(xlCellTypeVisible).Copy Destination:=shtNew.Range("A1")
+    shtNew.Range("A1").Select
+    
+    '// Copy mode off
+    Application.CutCopyMode = False
+    
+    shtNew.Activate
+    
+    '// Write the range data to the text file
+    Open varFileName For Output As #1
+    For i = 1 To shtNew.UsedRange.Rows.Count
+        For J = 1 To shtNew.UsedRange.Columns.Count
+            strText = IIf(J = 1, "", strText & ",") & shtNew.UsedRange.Cells(i, J)
+        Next J
+        Print #1, strText
+    Next i
+    Close #1
+
+    '// Close new workbook
+    wbDest.Close savechanges:=False
+    
+    '// Open file
+    Shell "explorer.exe " & varFileName, vbNormalFocus
+
+End Sub

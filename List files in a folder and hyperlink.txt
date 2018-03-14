@@ -1,0 +1,229 @@
+'==================================================================================================
+' ## List Files in a Sheet and Hyperlink
+'    - List all of the files in a folder and hyperlink using
+'      the hyperlink formula
+'    - Creates a new workbook to list the files
+'    - The files are indexed and hyperlinked with the
+'      hyperlink formula
+'    - Three types of hyperlinks are shown, one with just the
+'      file name and no extension, file name with file type
+'      and lastly the full file path
+'    - Details of last modified and file size are also shown
+'      for each file
+'==================================================================================================
+Sub ListFilesInFolder()
+    '// Vars
+    Dim cell As Range
+    Dim p As String, y As String, foName As String, strFolder As String, sFileName As String
+    Dim x As Variant, i As Variant
+    Dim n As Long, z As Long
+    Dim fd As FileDialog
+    Dim oFS As Object
+    Dim wbNew As Workbook
+
+    Set oFS = CreateObject("Scripting.FileSystemObject")
+
+    '// Pick folder to list files from
+    Set fd = Application.FileDialog(msoFileDialogFolderPicker)
+    With fd
+        .Title = "Select the folder to list files"
+        If .Show = -1 Then
+            foName = .SelectedItems(1)
+            strFolder = .SelectedItems(1) & "\"
+
+        Else
+            strFolder = vbNullString
+            Exit Sub
+        End If
+    End With
+
+    '// Get Folder Name
+    foName = Right(foName, Len(foName) - InStrRev(foName, "\"))
+
+    p = strFolder
+    x = GetFileList(p)
+
+    '// List Hyperlinks and data - Select Case for files found or no files found
+    Select Case IsArray(x)
+        '// No files found so exit sub
+        Case False
+            MsgBox "No files to display" & vbNewLine & "Procedure cancelled", Title:="List Files in a Folder"
+            Exit Sub
+
+        '// Files found, continue
+        Case True
+            '// Add new workbook
+            Set wbNew = Workbooks.Add(1)
+            wbNew.Sheets(1).Activate
+
+            '// Optimise
+            With Application
+                .DisplayAlerts = False
+                .ScreenUpdating = False
+            End With
+
+            For i = LBound(x) To UBound(x)
+                '// Error with a file go to the next one
+                ' Sometimes files are made without file extension in error, handle this
+                If InStr(x(i), ".") = 0 Then
+                    With ActiveSheet
+                        .Cells(i + 4, 3).Formula = "=HYPERLINK(""" & strFolder & x(i) & """,""" & x(i) & """)"
+                        .Cells(i + 4, 4).Value = "File With No Extension"
+                        .Cells(i + 4, 5).NumberFormat = "0.0"
+                        .Cells(i + 4, 5).Value = (FileLen(strFolder & x(i)) / 1024)
+                        .Cells(i + 4, 6).Value = Format(oFS.GetFile(strFolder & x(i)).Datelastmodified, "yyyy-mm-dd at hh:mm:ss")
+                        .Cells(i + 4, 7).Formula = "=HYPERLINK(""" & strFolder & x(i) & """,""" & x(i) & """)"
+                        .Cells(i + 4, 8).Formula = "=HYPERLINK(""" & strFolder & x(i) & """,""" & foName & "\" & x(i) & """)"
+                    End With
+                    '// go to the next file
+                    GoTo NextMyFile
+                End If
+
+                '// file name without extension
+                sFileName = Left(x(i), (InStr(x(i), ".") - 1))
+
+                '// file extension
+                y = Split(strFolder & x(i), ".")(UBound(Split(strFolder & x(i), ".")))
+                With ActiveSheet
+                    .Cells(i + 4, 3).Formula = "=HYPERLINK(""" & strFolder & x(i) & """,""" & sFileName & """)"
+                    .Cells(i + 4, 4).Value = y
+                    .Cells(i + 4, 5).NumberFormat = "0.0"
+                    .Cells(i + 4, 5).Value = (FileLen(strFolder & x(i)) / 1024)
+                    .Cells(i + 4, 6).Value = Format(oFS.GetFile(strFolder & x(i)).Datelastmodified, "yyyy-mm-dd at hh:mm:ss")
+                    .Cells(i + 4, 7).Formula = "=HYPERLINK(""" & strFolder & x(i) & """,""" & x(i) & """)"
+                    .Cells(i + 4, 8).Formula = "=HYPERLINK(""" & strFolder & x(i) & """,""" & foName & "\" & x(i) & """)"
+                End With
+NextMyFile:
+            Next i
+    End Select
+
+    '// Add numbers to left of list and index and format
+    n = ActiveSheet.Range("C5:C5000").Cells.SpecialCells(xlFormulas).Count
+    ReDim myArray(1 To n)
+    For z = LBound(myArray) To UBound(myArray)
+        ActiveSheet.Cells(z + 4, 2).Value = z
+        ActiveSheet.Cells(z + 4, 2).Font.Name = "Calibri"
+        ActiveSheet.Cells(z + 4, 2).Font.Size = 11
+    Next
+
+    '// Gridlines off
+    ActiveWindow.DisplayGridlines = False
+
+    '// Title and format
+    With ActiveSheet.Range("B1")
+        .Value = "List of files in: " & """" & foName & """"
+        .Font.Bold = True
+        .Font.Size = 12
+        .Font.Name = "Calibri"
+        .Font.Color = 9592886
+    End With
+    ActiveSheet.Range("B1:G1").Borders(xlEdgeBottom).Weight = xlThin
+
+    '// Total Files in Folder Count and format
+    With ActiveSheet.Range("B2")
+        .Value = "Total files: " & n
+        .Font.Name = "Calibri"
+        .Font.Size = 11
+    End With
+
+    '// Indexing of the files and formatting, Column B
+    With ActiveSheet.Range("B5:B" & z - 1 + 4)
+        .Borders(xlInsideHorizontal).Color = vbWhite
+        .Borders(xlInsideHorizontal).Weight = xlThin
+        .HorizontalAlignment = xlCenter
+        .VerticalAlignment = xlCenter
+        .Font.Color = 9592886
+        .Font.Bold = True
+        .Interior.Color = 15921906
+    End With
+
+    '// Heading Names
+    With ActiveSheet
+        .Range("C4").Value = "File Name Without Extension"
+        .Range("D4").Value = "File Ext"
+        .Range("E4").Value = "Size (kb)"
+        .Range("F4").Value = "Date Modified"
+        .Range("G4").Value = "File Name With Extension"
+        .Range("H4").Value = "Full File Path and Name"
+    End With
+
+    '// Top left corner borders
+    With ActiveSheet.Range("B4:B5")
+        .Borders(xlInsideHorizontal).Color = vbWhite
+        .Borders(xlInsideHorizontal).Weight = xlThin
+    End With
+
+    '// Headings formatting
+    With ActiveSheet.Range("B4:H4")
+        .Font.Bold = True
+        .Font.Size = 11
+        .Font.Name = "Calibri"
+        .Font.Color = 9592886
+        .Interior.Color = 15921906
+        .IndentLevel = 1
+        .Borders(xlInsideVertical).Color = vbWhite
+        .Borders(xlInsideVertical).Weight = xlThin
+    End With
+
+    With ActiveSheet.Range("C5:H" & z & 2)
+        .IndentLevel = 1
+        .Font.Name = "Calibri"
+        .Font.Size = 10
+    End With
+
+    With ActiveSheet.Range("C5:H" & z - 1 + 4).Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .Color = 9592886
+        .Weight = xlThin
+    End With
+
+    With ActiveSheet.Range("C5:H" & z - 1 + 4).Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .Color = 9592886
+        .Weight = xlThin
+    End With
+
+    '// Column widths
+    With ActiveSheet.Range("B1:H1")
+        .EntireColumn.AutoFit
+    End With
+    With ActiveSheet
+        .Columns(1).ColumnWidth = 3
+        .Columns(2).ColumnWidth = 4
+    End With
+End Sub
+
+
+'==================================================================================================
+' ## Function to get the array of files from a picked folder.
+'    This is for the Hyperlink Files in a Folder macro.
+'    Returns an array of filenames that match FileSpec.
+'    If no matching files are found, it returns False.
+'==================================================================================================
+Function GetFileList(FileSpec As String) As Variant
+    '// Vars
+    Dim FileArray() As Variant
+    Dim FileCount As Integer
+    Dim filename As String
+
+    On Error GoTo NoFilesFound
+
+    FileCount = 0
+    filename = Dir(FileSpec)
+    If filename = "" Then GoTo NoFilesFound
+
+    '// Loop until no more matching files are found
+    Do While filename <> ""
+        FileCount = FileCount + 1
+        ReDim Preserve FileArray(1 To FileCount)
+        FileArray(FileCount) = filename
+        filename = Dir()
+    Loop
+
+    GetFileList = FileArray
+    Exit Function
+
+    '// Error handler
+NoFilesFound:
+    GetFileList = False
+End Function

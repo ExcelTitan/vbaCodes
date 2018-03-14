@@ -1,0 +1,12 @@
+'To insert a New Record in a Column you can use the Application.WorksheetFunction. 
+'This Code will insert the next available ID using the MAX() Function into Column A 
+'on the active Worksheet:
+
+Sub InsertRecord()
+ 
+    Dim rngNewRecord As Range
+ 
+    Set rngNewRecord = Range("A1").End(xlDown).Offset(1, 0)
+    rngNewRecord.Value2 = WorksheetFunction.Max(ActiveCell.EntireColumn) + 1
+ 
+End Sub

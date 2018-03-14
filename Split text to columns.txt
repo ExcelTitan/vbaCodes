@@ -1,0 +1,50 @@
+'==========================================================================================================
+' ## Split text in cells to multiple columns
+'    Uses the Text to Columns feature, set to delimited - user gets to choose the delimiter
+'==========================================================================================================
+Sub SplitTextToColumns()
+    '// Vars
+    Dim rngSelection As Range
+    Dim rngInitialSelect As Range
+    Dim vntDelimiter As Variant
+    Dim strPrompt As String
+
+    '// Prompt the user to select a range
+    strPrompt = "Select the range to split text" & vbNewLine & vbNewLine & _
+        "Cannot Undo, Click cancel to quit this task"
+
+    On Error Resume Next
+    Set rngInitialSelect = Application.Selection
+    Set rngSelection = Application.InputBox(strPrompt, "Split cell text", rngInitialSelect.Address, Type:=8)
+    On Error GoTo 0
+
+    '// Exit if User cancels
+    If rngSelection Is Nothing Then Exit Sub
+
+    '// Test only one column in the selection
+    If rngSelection.Columns.Count > 1 Then
+        MsgBox "You can only split text with 1 column at a time." & vbNewLine & _
+        "The range can be multiple rows but no more than one column wide." & vbNewLine & _
+        "Try again by selecting cells in one column only.", Title:="Split Cell Text"
+        Exit Sub
+    End If
+
+    '// Input Delimiter
+    strPrompt = "Select the character to split the cells at" & vbNewLine & vbNewLine & _
+        "Cannot Undo, Click cancel to quit this task"
+    vntDelimiter = Application.InputBox(strPrompt, "Split Cells")
+    If vntDelimiter = False Then Exit Sub
+
+    '// Text to columns
+    rngSelection.TextToColumns _
+    Destination:=rngSelection, _
+    DataType:=xlDelimited, _
+    TextQualifier:=xlDoubleQuote, _
+    ConsecutiveDelimiter:=False, _
+    Tab:=True, _
+    Semicolon:=False, _
+    Comma:=False, _
+    Space:=False, _
+    Other:=True, _
+    OtherChar:=vntDelimiter
+End Sub

@@ -1,0 +1,27 @@
+'==================================================================================================
+' ## Function returns true if active cell is in a table and false if it isn't
+'    '// If the activesheet is protected
+'    If ActiveProtected = True Then Exit Sub
+'==================================================================================================
+Function IsActiveCellInTable() As Boolean
+    '// Vars
+    Dim rngActiveCell
+    
+    '   Need to turn off error handling briefly
+    Set rngActiveCell = ActiveCell
+    On Error Resume Next
+    
+    '// Test if the active cell's table name is not nothing, if nothing then
+    '   the value is false
+    rngActiveCell = (rngActiveCell.ListObject.Name <> "")
+    
+    '// Set function's return value.
+    IsActiveCellInTable = rngActiveCell
+    On Error GoTo 0
+    
+    '// If false then alert the user
+    If Not rngActiveCell = True Then
+        MsgBox "The active cell is not within a table" & vbNewLine & _
+                "Select a cell in a table and try again"
+    End If
+End Function

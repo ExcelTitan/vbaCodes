@@ -1,0 +1,2 @@
+' Test selection is a range with TypeName
+If TypeName(Selection) <> “Range” Then Exit Sub

@@ -1,0 +1,186 @@
+' ## Add the following to the ThisWorkbook Module
+
+Private Sub Workbook_Activate()
+    '// Add to the Context Menu
+    Call AddToRightClickMenu
+End Sub
+
+Private Sub Workbook_Deactivate()
+    '// Reset the Context Menu
+    Call ResetRightClickMenu
+End Sub
+
+' ## Add the following to a standard Module
+
+'==================================================================================================
+' ## Reset the Context Menu to the default settings. This clears the custom buttons
+'==================================================================================================
+Sub ResetRightClickMenu()
+    On Error Resume Next
+    '// Reset the context menu for cell ranges
+    CommandBars("cell").Reset
+
+    '// Reset the context menu for tables
+    Application.CommandBars("List Range Popup").Reset
+End Sub
+
+'==================================================================================================
+' ## Create a custom menu for your spreadsheet with your own buttons and macros
+'==================================================================================================
+Sub AddToRightClickMenu()
+    '// Vars
+    Dim cmdNew As CommandBarButton
+
+    '// Context menu for cells in a table
+    With CommandBars("List Range Popup")
+        .Reset
+        With .Controls.Add
+            .Caption = "UPPER CASE"
+            .OnAction = "UpperCase"
+            .FaceId = 100
+            .BeginGroup = True
+        End With
+        With .Controls.Add
+            .Caption = "Proper Case"
+            .OnAction = "ProperCase"
+            .FaceId = 95
+        End With
+        With .Controls.Add
+            .Caption = "lower case"
+            .OnAction = "LowerCase"
+            .FaceId = 91
+        End With
+    End With
+
+    '// Context menu for cells in a normal range
+    With Application.CommandBars("Cell")
+        .Reset
+        With .Controls.Add
+            .Caption = "UPPER CASE"
+            .OnAction = "UpperCase"
+            .FaceId = 100
+            .BeginGroup = True
+        End With
+        With .Controls.Add
+            .Caption = "Proper Case"
+            .OnAction = "ProperCase"
+            .FaceId = 95
+        End With
+        With .Controls.Add
+            .Caption = "lower case"
+            .OnAction = "LowerCase"
+            .FaceId = 91
+        End With
+    End With
+End Sub
+
+'==================================================================================================
+' ## Convert text to upper case
+'==================================================================================================
+Sub UpperCase()
+    Dim CaseRange As Range
+    Dim CalcMode As Long
+    Dim cell As Range
+    On Error Resume Next
+    
+    '// Convert only constants
+    Set CaseRange = Intersect(Selection, _
+        Selection.Cells.SpecialCells(xlCellTypeConstants, xlTextValues))
+    On Error GoTo 0
+    If CaseRange Is Nothing Then Exit Sub
+    
+    '// Optimise
+    With Application
+        CalcMode = .Calculation
+        .Calculation = xlCalculationManual
+        .ScreenUpdating = False
+        .EnableEvents = False
+    End With
+    
+    '// Loop and convert
+    For Each cell In CaseRange.Cells
+        cell.Value = UCase(cell.Value)
+    Next cell
+    
+    '// Optimise
+    With Application
+        .ScreenUpdating = True
+        .EnableEvents = True
+        .Calculation = CalcMode
+    End With
+End Sub
+
+
+'==================================================================================================
+' ## Convert text to lower case
+'==================================================================================================
+Sub LowerCase()
+    Dim CaseRange As Range
+    Dim CalcMode As Long
+    Dim cell As Range
+    On Error Resume Next
+    Set CaseRange = Intersect(Selection, _
+        Selection.Cells.SpecialCells(xlCellTypeConstants, xlTextValues))
+    On Error GoTo 0
+    
+    '// Convert only constants
+    If CaseRange Is Nothing Then Exit Sub
+    
+    '// Optimise
+    With Application
+        CalcMode = .Calculation
+        .Calculation = xlCalculationManual
+        .ScreenUpdating = False
+        .EnableEvents = False
+    End With
+    
+    '// Loop and convert
+    For Each cell In CaseRange.Cells
+        cell.Value = LCase(cell.Value)
+    Next cell
+    
+    '// Optimise
+    With Application
+        .ScreenUpdating = True
+        .EnableEvents = True
+        .Calculation = CalcMode
+    End With
+End Sub
+
+'==================================================================================================
+' ## Convert text to proper case
+'==================================================================================================
+Sub ProperCase()
+    '// Vars
+    Dim CaseRange As Range
+    Dim CalcMode As Long
+    Dim cell As Range
+    
+    On Error Resume Next
+    
+    '// Convert only constants
+    Set CaseRange = Intersect(Selection, _
+        Selection.Cells.SpecialCells(xlCellTypeConstants, xlTextValues))
+    On Error GoTo 0
+    If CaseRange Is Nothing Then Exit Sub
+    
+    '// Optimise
+    With Application
+        CalcMode = .Calculation
+        .Calculation = xlCalculationManual
+        .ScreenUpdating = False
+        .EnableEvents = False
+    End With
+    
+    '// Loop and convert
+    For Each cell In CaseRange.Cells
+        cell.Value = StrConv(cell.Value, vbProperCase)
+    Next cell
+    
+    '// Optimise
+    With Application
+        .ScreenUpdating = True
+        .EnableEvents = True
+        .Calculation = CalcMode
+    End With
+End Sub

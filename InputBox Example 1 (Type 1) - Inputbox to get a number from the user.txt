@@ -1,0 +1,17 @@
+'==================================================================================================
+' ## InputBox Example 1: (Type 1) - Inputbox to get a number from the user
+'==================================================================================================
+Sub InputBoxNumber()
+    '// Vars
+    Dim AgeNum As Variant
+    
+    '// Prompt for an age
+    AgeNum = Application.InputBox _
+        (Prompt:="How old are you?", Title:="Numbers only", Type:=1)
+
+    '// Test if clicked cancel
+    If AgeNum = False Then Exit Sub
+    
+    '// Output
+    MsgBox "You are " & AgeNum & " years old."
+End Sub

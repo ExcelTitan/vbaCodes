@@ -1,0 +1,20 @@
+Sub createNamedRangeWB()
+
+    '// Vars
+    Dim myWorksheet As Worksheet
+    Dim myNamedRange As Range
+
+    '// Declare vars
+    Dim myRangeName As String
+
+    '// identidy ranges
+    Set myWorksheet = ThisWorkbook.Worksheets("Sheet2")
+    Set myNamedRange = myWorksheet.Range("A5")
+
+    '// specify defined name
+    myRangeName = "namedRange"
+
+    '// create named range with workbook scope. Defined name and cell range are as specified
+    myWorksheet.Names.Add Name:=myRangeName, RefersTo:=myNamedRange
+
+End Sub
