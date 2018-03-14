@@ -1,0 +1,18 @@
+'To clear data in many Cells on a Worksheet you can use Code like this 
+'(this example picks up the Worksheet Name from a Defined Name called 
+
+Private Sub ClearReportData()
+ 
+    ' // vars
+    Dim strSheetName As String
+    strSheetName = Range("SheetName").Value2
+ 
+    Dim strCells As String
+    strCells = "E6:E8, B14:C18, E14:G18, I14:J14, L14:N14, E23:E25, B31:C35, E31:G35, I31:J35, L31:N35, E40:E42, B48:C52, E48:G52, I48:J52, L48:N52"
+ 
+    ' // clear the amed Ranges by prefixing the Named Range with the Worksheet Name
+    With Worksheets(strSheetName)
+        .Range(strCells).ClearContents
+    End With
+ 
+End Sub
