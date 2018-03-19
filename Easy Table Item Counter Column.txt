@@ -1,7 +1,0 @@
-Every now and then we need a column that tracks the item count for each transation in our table.
-
-A simple formula in a column referencing the current cell’s row minus the row number of the table header row will give you the correct item number for each line in the table.
-
-If you’re table is named Table1 and the column header is 'ID'
-
-=ROW()-ROW(Table1[[#Headers],[ID]])
