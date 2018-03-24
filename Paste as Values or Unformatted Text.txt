@@ -1,0 +1,16 @@
+'==================================================================================================
+' ## Paste as values or unformatted text from within or outside of Excel.
+'    Tip: assign this to a keyboard shortcut: Ctrl+Shift+V
+'==================================================================================================
+Sub PasteValues()
+    '// first test if pasting from within excel, if an error then
+    '   proceed to paste as unformatted text
+    On Error Resume Next
+    
+    '// Paste as values
+    Selection.PasteSpecial Paste:=xlPasteValues, _
+    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+    
+    '// Paste as unformatted text
+    ActiveSheet.PasteSpecial Format:="Text", Link:=False, DisplayAsIcon:=False
+End Sub
