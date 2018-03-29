@@ -1,0 +1,17 @@
+'==================================================================================================
+' ## Test a range of cells are empty using the WorksheetFunction.CountA(cellRange)
+'==================================================================================================
+Sub TestRangeEmpty()
+
+    Dim cellRange As Range
+    Set cellRange = Application.Selection   ' Selection
+    ' Set cellRange = Range("A:Z")          ' all cells in Columns A to Z
+    ' Set cellRange = Range("A1:Z10")       ' cells in range A1:Z10
+
+    If WorksheetFunction.CountA(cellRange) = 0 Then
+    
+        MsgBox "Empty cells" & vbNewLine & vbNewLine & cellRange.Address
+    
+    End If
+    
+End Sub
