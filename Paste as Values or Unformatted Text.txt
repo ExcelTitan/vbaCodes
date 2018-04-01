@@ -8,9 +8,12 @@ Sub PasteValues()
     On Error Resume Next
     
     '// Paste as values
-    Selection.PasteSpecial Paste:=xlPasteValues, _
-    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+    'Selection.PasteSpecial Paste:=xlPasteValues, _
+    'Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+    Application.CommandBars.ExecuteMso ("PasteValues")
     
     '// Paste as unformatted text
-    ActiveSheet.PasteSpecial Format:="Text", Link:=False, DisplayAsIcon:=False
+    'ActiveSheet.PasteSpecial Format:="Text", Link:=False, DisplayAsIcon:=False
+    Application.CommandBars.ExecuteMso ("PasteTextOnly")
+
 End Sub
