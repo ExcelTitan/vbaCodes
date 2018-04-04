@@ -1,0 +1,24 @@
+'==================================================================================================
+' ## Backup the activesheet. Good if you are running a macro that will affect cell values
+'==================================================================================================
+Sub BackupSheet()
+    '// vars
+    Dim OriginalSheet As String
+
+    '// get the original activesheet name and optimise
+    OriginalSheet = ActiveSheet.Name
+    Application.ScreenUpdating = False
+    
+    '// avoid sheet naming error
+    On Error Resume Next
+    
+    '// Copy the active sheet
+    ActiveSheet.Copy after:=ActiveSheet
+    ActiveSheet.Name = OriginalSheet
+    
+    '// Activate the original sheet
+    Sheets(OriginalSheet).Activate
+
+    '// optimise
+    Application.ScreenUpdating = False
+End Sub
