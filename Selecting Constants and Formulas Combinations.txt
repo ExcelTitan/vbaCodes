@@ -1,0 +1,64 @@
+' ## Selecting Constants and Text Values
+	Set rng = Intersect(Selection, _
+        Selection.Cells.SpecialCells(xlCellTypeConstants, xlTextValues))
+
+' ## Selecting Constants and Numbers
+	Set rng = Intersect(Selection, _
+        Selection.Cells.SpecialCells(xlCellTypeConstants, xlNumbers))		
+
+'==================================================================================================
+' ## Select only constants and Formulas within the currently selected range
+'==================================================================================================
+Sub SelectFormulaAndsConstants()    
+	Dim rng As Range
+    
+    On Error Resume Next
+    Set rng = Application.Selection
+	If rng.Count = 1 Then rng.Select: Exit Sub
+	
+    Set rng = Union(rng.SpecialCells(xlCellTypeConstants), _
+		rng.SpecialCells(xlCellTypeFormulas))
+    
+    On Error GoTo 0
+    If rng Is Nothing Then Exit Sub
+    
+    rng.Select
+End Sub
+
+
+
+
+'==================================================================================================
+' ## Error handle to Select Constants or Formulas or Constants and Formulas
+'==================================================================================================
+Sub SelectForumlasConstantsErrorHandle()
+    Dim rng As Range
+    
+    Set rng = Application.Selection
+    If rng.Count = 1 Then rng.Select: Exit Sub
+    
+    On Error GoTo checkConstantsFormulas
+    Set rng = Union(rng.Cells.SpecialCells(xlCellTypeConstants), _
+        rng.Cells.SpecialCells(xlCellTypeFormulas))
+    rng.Select
+        Exit Sub
+    
+ConstantType:
+    On Error GoTo checkFormulas
+    Set rng = rng.Cells.SpecialCells(xlCellTypeConstants)
+    rng.Select
+    Exit Sub
+    
+FormulasType:
+    Set rng = rng.SpecialCells(xlCellTypeFormulas)
+    rng.Select
+    
+'// Exit Sub
+Exit Sub
+    
+checkConstantsFormulas:
+    Resume ConstantType
+
+checkFormulas:
+    Resume FormulasType
+End Sub

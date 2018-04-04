@@ -1,0 +1,111 @@
+'==================================================================================================
+' ## All Relative. Change all formula cells in the selection
+'==================================================================================================
+Sub FormulaRelative()
+
+    '// Vars
+    Dim RdoRange As Range
+    Dim i As Integer
+    
+    '// Avoid the no formula cells type found error
+    On Error Resume Next
+    
+    '// Set Range variable to formula cells only
+    Set RdoRange = Selection.SpecialCells(Type:=xlFormulas)
+    
+    '// change to relative formula
+    For i = 1 To RdoRange.Areas.Count
+        RdoRange.Areas(i).Formula = _
+        Application.ConvertFormula _
+        (Formula:=RdoRange.Areas(i).Formula, _
+         FromReferenceStyle:=xlA1, _
+         ToReferenceStyle:=xlA1, ToAbsolute:=xlRelative)
+    Next i
+
+    '// Clear memory
+    Set RdoRange = Nothing
+End Sub
+
+'==================================================================================================
+' ## All Absolute. Change all formula cells in the selection
+'==================================================================================================
+Sub FormulaAbsolute()
+
+    '// Vars
+    Dim RdoRange As Range
+    Dim i As Integer
+
+    '// Avoid the no formula cells type found error
+    On Error Resume Next
+    
+    '// Set Range variable to formula cells only
+    Set RdoRange = Selection.SpecialCells(Type:=xlFormulas)
+    
+    '// change to absolute formula
+    For i = 1 To RdoRange.Areas.Count
+        RdoRange.Areas(i).Formula = _
+        Application.ConvertFormula _
+        (Formula:=RdoRange.Areas(i).Formula, _
+        FromReferenceStyle:=xlA1, _
+        ToReferenceStyle:=xlA1, ToAbsolute:=xlAbsolute)
+    Next i
+
+    '// Clear memory
+    Set RdoRange = Nothing
+End Sub
+
+'==================================================================================================
+' ## Relative Rows / Absolute Columns. Change all formula cells in the selection
+'==================================================================================================
+Sub FormulaARelativeRow()
+
+    '// Vars
+    Dim RdoRange As Range
+    Dim i As Integer
+
+    '// Avoid the no formula cells type found error
+    On Error Resume Next
+    
+    '// Set Range variable to formula cells only
+    Set RdoRange = Selection.SpecialCells(Type:=xlFormulas)
+    
+    '// change to absolute formula
+    For i = 1 To RdoRange.Areas.Count
+        RdoRange.Areas(i).Formula = _
+        Application.ConvertFormula _
+        (Formula:=RdoRange.Areas(i).Formula, _
+        FromReferenceStyle:=xlA1, _
+        ToReferenceStyle:=xlA1, ToAbsolute:=xlRelRowAbsColumn)
+    Next i
+
+    '// Clear memory
+    Set RdoRange = Nothing
+End Sub
+
+'==================================================================================================
+' ## Relative Columns / Absolute Rows. Change all formula cells in the selection
+'==================================================================================================
+Sub FormulaARelativeColumns()
+
+    '// Vars
+    Dim RdoRange As Range
+    Dim i As Integer
+
+    '// Avoid the no formula cells type found error
+    On Error Resume Next
+    
+    '// Set Range variable to formula cells only
+    Set RdoRange = Selection.SpecialCells(Type:=xlFormulas)
+    
+    '// change to absolute formula
+    For i = 1 To RdoRange.Areas.Count
+        RdoRange.Areas(i).Formula = _
+        Application.ConvertFormula _
+        (Formula:=RdoRange.Areas(i).Formula, _
+        FromReferenceStyle:=xlA1, _
+        ToReferenceStyle:=xlA1, ToAbsolute:=xlAbsRowRelColumn)
+    Next i
+
+    '// Clear memory
+    Set RdoRange = Nothing
+End Sub
