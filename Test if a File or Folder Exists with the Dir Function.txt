@@ -1,0 +1,44 @@
+'==================================================================================================
+' ## Function to test if a file exists
+'==================================================================================================
+Function FileExists(FilePath As String) As Boolean
+    Dim TestStr As String
+    TestStr = ""
+    On Error Resume Next
+        TestStr = Dir(FilePath)
+    On Error GoTo 0
+    If TestStr <> "" Then FileExists = True
+End Function
+
+Sub demoFileExists()
+
+Dim FilePath As String
+FilePath = "C:\test.xlsx"
+
+If FileExists(FilePath) Then MsgBox "File exists" Else: MsgBox "File doesn't exist"
+
+End Sub
+
+
+'==================================================================================================
+' ## Function to test if a folder exists
+'==================================================================================================
+Function FolderExists(FolderPath As String) As Boolean
+    Dim TestStr As String
+    TestStr = ""
+    If Right(FolderPath, 1) <> "\" Then FolderPath = FolderPath & "\"
+    
+    On Error Resume Next
+        TestStr = Dir(FolderPath, vbDirectory)
+    On Error GoTo 0
+    If TestStr <> "" Then FolderExists = True
+End Function
+
+Sub demoFolderExists()
+
+Dim FolderPath As String
+FolderPath = "C:\test\"
+
+If FolderExists(FolderPath) Then MsgBox "Folder exists" Else: MsgBox "Folder doesn't exist"
+
+End Sub
