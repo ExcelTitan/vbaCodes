@@ -1,0 +1,17 @@
+'=================================================================================================================================
+' ## Install font without Admin rights
+'=================================================================================================================================
+Option Explicit
+
+Private Declare Function AddFontResource Lib "gdi32.dll" Alias "AddFontResourceA" ( _
+    ByVal lpFileName As String) As Long
+
+Sub InstallFont()
+    Dim Result As Long
+    Result = AddFontResource("H:\Bookerly\Bookerly-BoldItalic.ttf")
+    If Result = 0 Then
+        MsgBox "There was an error installing the font, check the file path and try again"
+    Else
+        MsgBox Result & " fonts added"
+    End If
+End Sub
